@@ -6,18 +6,20 @@ export default function Auth (request:Request, response:Response, next:NextFunct
     return response.status(401).send({ error: 'token não foi enviado' })
   }
   const tokenSplit = authHeader.split(' ')
-  if (tokenSplit.length === 2) {
+  if (tokenSplit.length !== 2) {
     return response.status(401).send({ error: 'Token Invalido' })
   }
 
   const [schema, token] = tokenSplit
 
   if (!/^Bearer$/i.test(schema)) {
+    console.log('erro token invalido1')
     return response.status(401).send({ error: 'Token Invalido' })
   }
 
   jwt.verify(token, process.env.SECRET, (err, decoded) => {
     if (err) {
+console.log('erro token invalido2')
       return response.status(401).send({ error: 'Token Invalido' })
     }
     // @ts-ignore
